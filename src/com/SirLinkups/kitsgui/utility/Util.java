@@ -1,7 +1,9 @@
 package com.SirLinkups.kitsgui.utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,5 +45,10 @@ public class Util {
 			if(!n) list.add(l);
 		}
 		return list;
+	}
+	
+	public static <K, V> Map<K, V> newMap() {
+		Map<K, V> map = new HashMap<K, V>();
+		return map;
 	}
 }
