@@ -1,4 +1,4 @@
-name: KitsGUIPlus
+name: KitsGUI+
 main: com.SirLinkups.kitsgui.Core
 authors: [Linkups, SirBlobman]
 version: 1.0
@@ -7,4 +7,5 @@ commands:
       description: Open the GUI for the kits
       aliases: [kits]
       usage: /<command>
-      permission-message: '&cYou don't have permission to do this!'
+      permission: kitsgui.kits
+      permission-message: '&cYou don''t have the permission &bkitsgui.kits'
