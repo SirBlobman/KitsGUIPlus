@@ -17,4 +17,9 @@
 hs_err_pid*
 /bin/
 build.xml
+
+# Others
 .project
+.project
+*.launch
+.classpath
