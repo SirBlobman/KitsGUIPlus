@@ -110,6 +110,7 @@ public class CommandKit implements CommandExecutor, Listener {
 			ItemStack is = e.getItem();
 			if(!KitsUtil.air(is)) {
 				if(is.equals(KANGAROO_FIREWORK)) {
+					e.setCancelled(true);
 					boolean use = cooldown(p);
 					if(use) {
 						Vector v = p.getVelocity();
@@ -117,6 +118,8 @@ public class CommandKit implements CommandExecutor, Listener {
 						v.add(va);
 						p.setVelocity(v);
 						p.setFallDistance(-5.0F);
+						String msg = "You used Kangaroo Jump!";
+						p.sendMessage(msg);
 						addCooldown(p);
 					}
 				}
@@ -150,7 +153,7 @@ public class CommandKit implements CommandExecutor, Listener {
 				p.sendMessage(error);
 				return false;
 			}
-		} else return false;
+		} else return true;
 	}
 	
 	private void addCooldown(Player p) {
