@@ -1,9 +1,13 @@
 package com.SirLinkups.kitsgui.utility;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import java.util.List;
 
-public class Kits {
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+public class KitsUtil extends Util {
 	public static boolean air(ItemStack is) {
 		if(is == null) return true;
 		Material mat = is.getType();
@@ -31,7 +35,17 @@ public class Kits {
 		return is;
 	}
 	
-	public static ItemStack newItem(Material mat, int amount, int data, String disp) {
-		
+	public static ItemStack newItem(Material mat, int amount, int data, String disp, String... lore) {
+		ItemStack is = newItem(mat, amount, data);
+		String name = color(disp);
+		List<String> list = newList(color(lore));
+		if(!air(is)) {
+			ItemMeta meta = is.getItemMeta();
+			meta.setDisplayName(name);
+			meta.setLore(list);
+			meta.addItemFlags(ItemFlag.values());
+			is.setItemMeta(meta);
+		}
+		return is;
 	}
 }
