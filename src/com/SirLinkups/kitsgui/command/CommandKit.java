@@ -147,7 +147,10 @@ public class CommandKit implements CommandExecutor, Listener {
 			long c = System.currentTimeMillis();
 			long t = l - c;
 			int time = (int) (t / 1000L);
-			if(time == 0) return true;
+			if(time <= 0) {
+				cooldown.remove(p);
+				return true;
+			}
 			else {
 				String error = String.format("You must wait %1s seconds before using another special ability!", time);
 				p.sendMessage(error);
