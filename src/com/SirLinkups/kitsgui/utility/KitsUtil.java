@@ -57,6 +57,7 @@ public class KitsUtil extends Util {
 		ItemMeta meta = is.getItemMeta();
 		PotionMeta pm = (PotionMeta) meta;
 		PotionEffect pe = new PotionEffect(pet, duration, amplifier);
+		pm.setMainEffect(pet);
 		pm.addCustomEffect(pe, true);
 		is.setItemMeta(pm);
 		return is;
