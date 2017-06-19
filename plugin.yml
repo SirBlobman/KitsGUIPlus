@@ -8,4 +8,3 @@ commands:
       aliases: [kits]
       usage: /<command>
       permission: kitsgui.kits
-      permission-message: '&cYou don''t have the permission &bkitsgui.kits'

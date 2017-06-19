@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -76,7 +77,10 @@ public class CommandKit implements CommandExecutor, Listener {
 						ItemStack helm = newItem(Material.IRON_HELMET, 1);
 						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
-						ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+						
+						ItemStack boot = newItem(Material.IRON_BOOTS, 1, 0, "Kangaroo Feet");
+						boot.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 32767);
+						
 						ItemStack sword = newItem(Material.STONE_SWORD);
 						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
 						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup, KANGAROO_FIREWORK};
@@ -85,7 +89,18 @@ public class CommandKit implements CommandExecutor, Listener {
 						String msg = "You selected the Kangaroo kit.";
 						p.sendMessage(msg);
 					} else if(is.equals(SWORDSMAN_KIT)) {
-						
+						ItemStack helm = newItem(Material.IRON_HELMET, 1);
+						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
+						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
+						ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+						ItemStack sword = newItem(Material.STONE_SWORD, 1);
+						sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 12);
+						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
+						pi.clear();
+						pi.addItem(add);
+						String msg = "You selected the Swordsman kit";
+						p.sendMessage(msg);
 					} else if(is.equals(ARCHER_KIT)) {
 						
 					} else if(is.equals(SNOWMAN_KIT)) {
