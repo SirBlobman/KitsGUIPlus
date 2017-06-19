@@ -25,6 +25,8 @@ import org.bukkit.util.Vector;
 import com.SirLinkups.kitsgui.utility.KitsUtil;
 import com.SirLinkups.kitsgui.utility.Util;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CommandKit implements CommandExecutor, Listener {
 	private static Map<Player, Long> cooldown = Util.newMap();
 	
@@ -86,7 +88,7 @@ public class CommandKit implements CommandExecutor, Listener {
 						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup, KANGAROO_FIREWORK};
 						pi.clear();
 						pi.addItem(add);
-						String msg = "You selected the Kangaroo kit.";
+						String msg = ChatColor.RED + "You selected the Kangaroo kit.";
 						p.sendMessage(msg);
 					} else if(is.equals(SWORDSMAN_KIT)) {
 						ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -99,7 +101,7 @@ public class CommandKit implements CommandExecutor, Listener {
 						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
 						pi.clear();
 						pi.addItem(add);
-						String msg = "You selected the Swordsman kit";
+						String msg = ChatColor.RED + "You selected the Swordsman kit";
 						p.sendMessage(msg);
 					} else if(is.equals(ARCHER_KIT)) {
 						
