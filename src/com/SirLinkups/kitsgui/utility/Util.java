@@ -13,6 +13,8 @@ import org.bukkit.Statistic;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import com.SirLinkups.kitsgui.listener.ListenCoins;
+
 public class Util {
 	protected static final Server SERVER = Bukkit.getServer();
 	protected static final ConsoleCommandSender CONSOLE = SERVER.getConsoleSender();
@@ -31,11 +33,11 @@ public class Util {
 		String s = str(o);
 		int kills = p.getStatistic(Statistic.PLAYER_KILLS);
 		int deaths = p.getStatistic(Statistic.DEATHS);
-		double dkills = kills;//turn to doubles for division
+		double dkills = kills;
 		double ddeath = deaths;
 		double kdr = (dkills / ddeath);
 		int level = Math.round((kills / 5));
-		int coins = 0; //Will add code for coins later
+		int coins = ListenCoins.coins(p);
 		
 		String k = s.replace("%kills%", str(kills));
 		String d = k.replace("%deaths%", str(deaths));
