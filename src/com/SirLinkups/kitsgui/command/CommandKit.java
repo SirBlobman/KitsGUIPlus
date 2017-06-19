@@ -1,6 +1,7 @@
 package com.SirLinkups.kitsgui.command;
 
 import static com.SirLinkups.kitsgui.utility.KitsUtil.newItem;
+import static com.SirLinkups.kitsgui.utility.KitsUtil.newLeather;
 
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -43,6 +45,7 @@ public class CommandKit implements CommandExecutor, Listener {
 	private static final ItemStack NINJA_KIT = newItem(Material.NETHER_STAR, 1, 0, "&b&lNinja");
 	private static final ItemStack ENDERMAN_KIT = newItem(Material.ENDER_PEARL, 1, 0, "&b&lEnderman");
 	private static final ItemStack STRAFE_KIT = newItem(Material.CHAINMAIL_CHESTPLATE, 1, 0, "&b&lStrafe");
+	private static final ItemStack HULK_KIT = newItem(Material.STAINED_CLAY, 1, 13, "&b&lHulk");
 	
 	//Kit Related
 	private static final ItemStack KANGAROO_FIREWORK = newItem(Material.FIREWORK, 1, 0, "&2Ultra Jump");
@@ -69,70 +72,85 @@ public class CommandKit implements CommandExecutor, Listener {
 		if(he instanceof Player) {
 			Player p = (Player) he;
 			Inventory i = e.getClickedInventory();
-			String name = i.getName();
-			if(name.equals(TITLE)) {
-				e.setCancelled(true);
-				ItemStack is = e.getCurrentItem();
-				if(!KitsUtil.air(is)) {
-					PlayerInventory pi = p.getInventory();
-					if(is.equals(KANGAROO_KIT)) {
-						p.closeInventory();
-						ItemStack helm = newItem(Material.IRON_HELMET, 1);
-						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
-						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);	
-						ItemStack boot = newItem(Material.IRON_BOOTS, 1, 0, "Kangaroo Feet");
-						boot.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 32767);
-						ItemStack sword = newItem(Material.STONE_SWORD);
-						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
-						
-						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup, KANGAROO_FIREWORK};
-						pi.clear();
-						pi.addItem(add);
-						String msg = Util.color("&cYou selected the Kangaroo kit");
-						p.sendMessage(msg);
-					} else if(is.equals(SWORDSMAN_KIT)) {
-						ItemStack helm = newItem(Material.IRON_HELMET, 1);
-						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
-						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
-						ItemStack boot = newItem(Material.IRON_BOOTS, 1);
-						ItemStack sword = newItem(Material.STONE_SWORD, 1);
-						sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 12);
-						
-						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
-						pi.clear();
-						pi.addItem(add);
-						String msg = Util.color("&cYou selected the Swordsman kit");
-						p.sendMessage(msg);
-					} else if(is.equals(ARCHER_KIT)) {
-						
-					} else if(is.equals(SNOWMAN_KIT)) {
-						
-					} else if(is.equals(FISHERMAN_KIT)) {
-						
-					} else if(is.equals(NINJA_KIT)) {
-						
-					} else if(is.equals(ENDERMAN_KIT)) {
-						
-					} else if(is.equals(STRAFE_KIT)) {
-						ItemStack helm = newItem(Material.IRON_HELMET, 1);
-						ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
-						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
-						ItemStack boot = newItem(Material.IRON_BOOTS, 1);
-						ItemStack sword = newItem(Material.STONE_SWORD, 1);
-						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
-						
-						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
-						pi.clear();
-						pi.addItem(add);
-						String msg = Util.color("&cYou selected the Swordsman kit");
-						p.sendMessage(msg);
-						
-						PotionEffectType fast = PotionEffectType.SPEED;
-						PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
-						p.addPotionEffect(pe, true);
-					}
-				} 
+			if(i != null) {
+				String name = i.getName();
+				if(name != null && name.equals(TITLE)) {
+					e.setCancelled(true);
+					ItemStack is = e.getCurrentItem();
+					if(!KitsUtil.air(is)) {
+						PlayerInventory pi = p.getInventory();
+						if(is.equals(KANGAROO_KIT)) {
+							p.closeInventory();
+							ItemStack helm = newItem(Material.IRON_HELMET, 1);
+							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
+							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);	
+							ItemStack boot = newItem(Material.IRON_BOOTS, 1, 0, "Kangaroo Feet");
+							boot.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 32767);
+							ItemStack sword = newItem(Material.STONE_SWORD);
+							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup, KANGAROO_FIREWORK};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Kangaroo kit");
+							p.sendMessage(msg);
+						} else if(is.equals(SWORDSMAN_KIT)) {
+							ItemStack helm = newItem(Material.IRON_HELMET, 1);
+							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
+							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
+							ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+							ItemStack sword = newItem(Material.STONE_SWORD, 1);
+							sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 12);
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Swordsman kit");
+							p.sendMessage(msg);
+						} else if(is.equals(ARCHER_KIT)) {
+							
+						} else if(is.equals(SNOWMAN_KIT)) {
+							
+						} else if(is.equals(FISHERMAN_KIT)) {
+							
+						} else if(is.equals(NINJA_KIT)) {
+							
+						} else if(is.equals(ENDERMAN_KIT)) {
+							
+						} else if(is.equals(STRAFE_KIT)) {
+							ItemStack helm = newItem(Material.IRON_HELMET, 1);
+							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
+							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
+							ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+							ItemStack sword = newItem(Material.STONE_SWORD, 1);
+							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Swordsman kit");
+							p.sendMessage(msg);
+							
+							PotionEffectType fast = PotionEffectType.SPEED;
+							PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
+							p.addPotionEffect(pe, true);
+						} else if(is.equals(HULK_KIT)) {
+							ItemStack helm = newLeather(EquipmentSlot.HEAD, 21, 130, 2, "Hulk Helmet");
+							ItemStack ches = newLeather(EquipmentSlot.CHEST, 21, 130, 2, "Hulk Chestplate");
+							ItemStack legs = newItem(Material.CHAINMAIL_LEGGINGS, 1);
+							ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+							ItemStack sword = newItem(Material.STONE_SWORD, 1);
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Hulk kit");
+							p.sendMessage(msg);
+						}
+					} 
+				}
 			}
 		}
 	}
@@ -167,7 +185,7 @@ public class CommandKit implements CommandExecutor, Listener {
 		ItemStack[] inv = new ItemStack[] {
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
 			BARS, KANGAROO_KIT, SWORDSMAN_KIT, ARCHER_KIT, SNOWMAN_KIT, FISHERMAN_KIT, NINJA_KIT, ENDERMAN_KIT, BARS,
-			BARS, STRAFE_KIT, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
+			BARS, STRAFE_KIT, HULK_KIT, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL

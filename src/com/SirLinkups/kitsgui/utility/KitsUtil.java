@@ -2,10 +2,13 @@ package com.SirLinkups.kitsgui.utility;
 
 import java.util.List;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -50,6 +53,27 @@ public class KitsUtil extends Util {
 			is.setItemMeta(meta);
 		}
 		return is;
+	}
+	
+	public static ItemStack newLeather(EquipmentSlot es, int red, int green, int blue, String name) {
+		Material mat = Material.AIR;
+		switch(es) {
+		case HEAD: {mat = Material.LEATHER_HELMET; break;}
+		case CHEST: {mat = Material.LEATHER_CHESTPLATE; break;}
+		case LEGS: {mat = Material.LEATHER_LEGGINGS; break;}
+		case FEET: {mat = Material.LEATHER_BOOTS; break;}
+		default: {mat = Material.AIR; break;}
+		}
+		
+		if(mat != Material.AIR) {
+			ItemStack is = newItem(mat, 1, 0, name);
+			ItemMeta meta = is.getItemMeta();
+			LeatherArmorMeta l = (LeatherArmorMeta) meta;
+			Color c = Color.fromRGB(red, green, blue);
+			l.setColor(c);
+			is.setItemMeta(l);
+			return is;
+		} else return newItem(Material.LEATHER);
 	}
 	
 	public static ItemStack newPotion(PotionEffectType pet, int duration, int amplifier) {

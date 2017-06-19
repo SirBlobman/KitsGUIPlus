@@ -14,7 +14,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.SirLinkups.kitsgui.config.ConfigDatabase;
-import com.SirLinkups.kitsgui.listener.ListenCoins;
 
 public class Util {
 	protected static final Server SERVER = Bukkit.getServer();

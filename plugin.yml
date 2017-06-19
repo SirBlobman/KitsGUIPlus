@@ -12,3 +12,7 @@ commands:
       description: Main command
       aliases: [kgp]
       usage: /<command>
+   kitshop:
+     description: Open the shop for donator kits
+     alias: [ks]
+     usage: /<command>
