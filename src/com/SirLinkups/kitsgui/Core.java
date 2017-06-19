@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.SirLinkups.kitsgui.command.CommandKit;
+import com.SirLinkups.kitsgui.command.CommandMain;
 import com.SirLinkups.kitsgui.listener.ListenCoins;
 import com.SirLinkups.kitsgui.utility.ScoreboardUtil;
 import com.SirLinkups.kitsgui.utility.Util;
@@ -21,6 +22,7 @@ public class Core extends JavaPlugin {
 		ScoreboardUtil.load();
 		getCommand("kit").setExecutor(new CommandKit());
 		getCommand("kit").setPermissionMessage(Util.color("&cYou don't have the permission &bkitsgui.kits"));
+		getCommand("kitsguiplus").setExecutor(new CommandMain());
 		Bukkit.getPluginManager().registerEvents(new CommandKit(), this);
 		Bukkit.getPluginManager().registerEvents(new ListenCoins(), this);
 	}

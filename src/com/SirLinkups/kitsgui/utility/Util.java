@@ -13,6 +13,7 @@ import org.bukkit.Statistic;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import com.SirLinkups.kitsgui.config.ConfigDatabase;
 import com.SirLinkups.kitsgui.listener.ListenCoins;
 
 public class Util {
@@ -37,7 +38,7 @@ public class Util {
 		double ddeath = deaths;
 		double kdr = (dkills / ddeath);
 		int level = Math.round((kills / 5));
-		int coins = ListenCoins.coins(p);
+		int coins = ConfigDatabase.coins(p);
 		
 		String k = s.replace("%kills%", str(kills));
 		String d = k.replace("%deaths%", str(deaths));

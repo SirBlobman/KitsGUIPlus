@@ -66,6 +66,13 @@ Donator Kits:
 Commands:
   - /kit: opens the kit selection GUI
     - add shop to buy with coins
+	
+Variables:
+	%kills% - This shows the kills of the player how many they have
+	%level% - Every 5 kills it levels you up to another levels ex. 1, 2, 3, ect.
+	%deaths% - Counts how many deaths they've had
+	%kdr% - Shows the Kill Death Rate of the player
+	%coins% - Every time a player kills another player, it gives them a coin which they can use to buy kits.
 
 Other Features:
   - Scoreboard

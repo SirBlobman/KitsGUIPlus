@@ -8,3 +8,7 @@ commands:
       aliases: [kits]
       usage: /<command>
       permission: kitsgui.kits
+   kitsguiplus:
+      description: Main command
+      aliases: [kgp]
+      usage: /<command>
