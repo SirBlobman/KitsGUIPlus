@@ -20,12 +20,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.SirLinkups.kitsgui.utility.KitsUtil;
 import com.SirLinkups.kitsgui.utility.Util;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class CommandKit implements CommandExecutor, Listener {
 	private static Map<Player, Long> cooldown = Util.newMap();
@@ -42,6 +42,7 @@ public class CommandKit implements CommandExecutor, Listener {
 	private static final ItemStack FISHERMAN_KIT = newItem(Material.FISHING_ROD, 1, 0, "&b&lFisherman");
 	private static final ItemStack NINJA_KIT = newItem(Material.NETHER_STAR, 1, 0, "&b&lNinja");
 	private static final ItemStack ENDERMAN_KIT = newItem(Material.ENDER_PEARL, 1, 0, "&b&lEnderman");
+	private static final ItemStack STRAFE_KIT = newItem(Material.CHAINMAIL_CHESTPLATE, 1, 0, "&b&lStrafe");
 	
 	//Kit Related
 	private static final ItemStack KANGAROO_FIREWORK = newItem(Material.FIREWORK, 1, 0, "&2Ultra Jump");
@@ -78,13 +79,12 @@ public class CommandKit implements CommandExecutor, Listener {
 						p.closeInventory();
 						ItemStack helm = newItem(Material.IRON_HELMET, 1);
 						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
-						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
-						
+						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);	
 						ItemStack boot = newItem(Material.IRON_BOOTS, 1, 0, "Kangaroo Feet");
 						boot.addUnsafeEnchantment(Enchantment.PROTECTION_FALL, 32767);
-						
 						ItemStack sword = newItem(Material.STONE_SWORD);
 						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+						
 						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup, KANGAROO_FIREWORK};
 						pi.clear();
 						pi.addItem(add);
@@ -98,6 +98,7 @@ public class CommandKit implements CommandExecutor, Listener {
 						ItemStack sword = newItem(Material.STONE_SWORD, 1);
 						sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
 						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 12);
+						
 						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
 						pi.clear();
 						pi.addItem(add);
@@ -113,6 +114,23 @@ public class CommandKit implements CommandExecutor, Listener {
 						
 					} else if(is.equals(ENDERMAN_KIT)) {
 						
+					} else if(is.equals(STRAFE_KIT)) {
+						ItemStack helm = newItem(Material.IRON_HELMET, 1);
+						ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
+						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
+						ItemStack boot = newItem(Material.IRON_BOOTS, 1);
+						ItemStack sword = newItem(Material.STONE_SWORD, 1);
+						ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+						
+						ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
+						pi.clear();
+						pi.addItem(add);
+						String msg = Util.color("&cYou selected the Swordsman kit");
+						p.sendMessage(msg);
+						
+						PotionEffectType fast = PotionEffectType.SPEED;
+						PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
+						p.addPotionEffect(pe, true);
 					}
 				} 
 			}
@@ -149,7 +167,7 @@ public class CommandKit implements CommandExecutor, Listener {
 		ItemStack[] inv = new ItemStack[] {
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
 			BARS, KANGAROO_KIT, SWORDSMAN_KIT, ARCHER_KIT, SNOWMAN_KIT, FISHERMAN_KIT, NINJA_KIT, ENDERMAN_KIT, BARS,
-			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
+			BARS, STRAFE_KIT, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL

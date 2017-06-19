@@ -6,6 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class KitsUtil extends Util {
 	public static boolean air(ItemStack is) {
@@ -46,6 +49,16 @@ public class KitsUtil extends Util {
 			meta.addItemFlags(ItemFlag.values());
 			is.setItemMeta(meta);
 		}
+		return is;
+	}
+	
+	public static ItemStack newPotion(PotionEffectType pet, int duration, int amplifier) {
+		ItemStack is = newItem(Material.POTION, 1);
+		ItemMeta meta = is.getItemMeta();
+		PotionMeta pm = (PotionMeta) meta;
+		PotionEffect pe = new PotionEffect(pet, duration, amplifier);
+		pm.addCustomEffect(pe, true);
+		is.setItemMeta(pm);
 		return is;
 	}
 }
