@@ -72,6 +72,7 @@ public class CommandKit implements CommandExecutor, Listener {
 				if(!KitsUtil.air(is)) {
 					PlayerInventory pi = p.getInventory();
 					if(is.equals(KANGAROO_KIT)) {
+						p.closeInventory();
 						ItemStack helm = newItem(Material.IRON_HELMET, 1);
 						ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 						ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
