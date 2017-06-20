@@ -296,22 +296,30 @@ public class CommandKit implements CommandExecutor, Listener {
 	}
 	
 	@EventHandler
-	public void sneak(PlayerToggleSneakEvent e) {
+	public void hulk(PlayerToggleSneakEvent e) {
 		Player p = e.getPlayer();
-		PlayerInventory pi = p.getInventory();
-		ItemStack is = pi.getItemInHand();
-		if(!KitsUtil.air(is) && cooldown(p) && is.equals(HULK_SWORD)) HULK_SMASH.add(p);
+		if(e.isSneaking()) {HULK_SMASH.add(p);}
 	}
 	
 	@EventHandler
 	@SuppressWarnings("deprecation")
-	public void move(PlayerMoveEvent e) {
+	public void hulk(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		if(p.isOnGround()) {
-			Location l = p.getLocation();
-			World w = l.getWorld();
-			w.createExplosion(l.getX(), l.getY(), l.getZ(), 5.0F, false, false);
-			HULK_SMASH.remove(p);
+		if(p.isSneaking() && p.isOnGround() && HULK_SMASH.contains(p)) {
+			PlayerInventory pi = p.getInventory();
+			ItemStack is = pi.getItemInHand();
+			if(!KitsUtil.air(is) && is.equals(HULK_SWORD)) {
+				if(cooldown(p)) {
+					PotionEffectType pet = PotionEffectType.DAMAGE_RESISTANCE;
+					PotionEffect pe = new PotionEffect(pet, 2, 255);
+					Location l = p.getLocation();
+					World w = l.getWorld();
+					p.addPotionEffect(pe);
+					w.createExplosion(l.getX(), l.getY(), l.getZ(), 5.0F, false, false);
+					HULK_SMASH.remove(p);
+					addCooldown(p);
+				} else HULK_SMASH.remove(p);
+			} else HULK_SMASH.remove(p);
 		}
 	}
 	
