@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.MaterialData;
+import org.bukkit.material.SpawnEgg;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -84,6 +87,15 @@ public class KitsUtil extends Util {
 		pm.setMainEffect(pet);
 		pm.addCustomEffect(pe, true);
 		is.setItemMeta(pm);
+		return is;
+	}
+	
+	public static ItemStack newSpawnEgg(EntityType et, String name) {
+		ItemStack is = newItem(Material.MONSTER_EGG, 1, 0, name);
+		MaterialData md = is.getData();
+		SpawnEgg se = (SpawnEgg) md;
+		se.setSpawnedType(et);
+		is.setData(se);
 		return is;
 	}
 }
