@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -253,11 +254,17 @@ public class CommandKit implements CommandExecutor, Listener {
 							Horse h = w.spawn(l, Horse.class);
 							h.setJumpStrength(20.0D);
 							h.setMaxHealth(200.0D);
+							HorseInventory hi = h.getInventory();
+							hi.setSaddle(newItem(Material.SADDLE, 1));
+							hi.setArmor(newItem(Material.DIAMOND_BARDING, 1));
 							h.setHealth(200.0D);
 							h.setColor(Color.BLACK);
 							h.setOwner(p);
 							h.setPassenger(p);
+							ItemStack sword = newItem(Material.WOOD_SWORD, 1);
 							
+							pi.clear();
+							pi.addItem(sword);
 							String msg = Util.color("&cYou selected the Horseman kit");
 							p.sendMessage(msg);
 						}
