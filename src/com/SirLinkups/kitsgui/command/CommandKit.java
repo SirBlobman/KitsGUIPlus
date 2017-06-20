@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -340,7 +341,7 @@ public class CommandKit implements CommandExecutor, Listener {
 				return true;
 			}
 			else {
-				String error = String.format("You must wait %1s seconds before using another special ability!", time);
+				String error = String.format(ChatColor.RED + "You must wait " + ChatColor.GOLD + "%1s " + ChatColor.RED + "seconds before using another special ability!", time);
 				p.sendMessage(error);
 				return false;
 			}
