@@ -135,9 +135,11 @@ public class CommandKit implements CommandExecutor, Listener {
 							ItemStack sword = newItem(Material.STONE_SWORD, 1);
 							ItemStack bow = newItem(Material.BOW, 1);
 							bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+							bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+							ItemStack arrow = newItem(Material.ARROW, 1);
 							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
 							
-							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, bow, soup};
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, bow, soup, arrow};
 							pi.clear();
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Archer kit");
