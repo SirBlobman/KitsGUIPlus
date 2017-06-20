@@ -111,6 +111,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Kangaroo kit");
 							p.sendMessage(msg);
 						} else if(is.equals(SWORDSMAN_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
@@ -125,6 +126,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Swordsman kit");
 							p.sendMessage(msg);
 						} else if(is.equals(ARCHER_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.CHAINMAIL_LEGGINGS, 1);
@@ -140,6 +142,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Archer kit");
 							p.sendMessage(msg);
 						} else if(is.equals(SNOWMAN_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
@@ -152,6 +155,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Snowman kit");
 							p.sendMessage(msg);
 						} else if(is.equals(FISHERMAN_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
@@ -165,6 +169,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Fisherman kit");
 							p.sendMessage(msg);
 						} else if(is.equals(NINJA_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
@@ -179,6 +184,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Ninja kit");
 							p.sendMessage(msg);
 						} else if(is.equals(ENDERMAN_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.CHAINMAIL_LEGGINGS, 1);
@@ -193,6 +199,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Enderman kit");
 							p.sendMessage(msg);
 						} else if(is.equals(STRAFE_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
@@ -210,6 +217,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
 							p.addPotionEffect(pe, true);
 						} else if(is.equals(HULK_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 21, 130, 2, "Hulk Helmet");
 							ItemStack ches = newLeather(EquipmentSlot.CHEST, 21, 130, 2, "Hulk Chestplate");
 							ItemStack legs = newItem(Material.CHAINMAIL_LEGGINGS, 1);
@@ -222,6 +230,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Hulk kit");
 							p.sendMessage(msg);
 						} else if(is.equals(CACTUS_KIT)) {
+							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 0, 255, 0, "&2Cactus Helmet");
 							ItemStack ches = newLeather(EquipmentSlot.CHEST, 0, 255, 0, "&2Cactus Chestplate");
 							ItemStack legs = newLeather(EquipmentSlot.LEGS, 0, 255, 0, "&2Cactus Leggings");
@@ -238,6 +247,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Cactus kit");
 							p.sendMessage(msg);
 						} else if(is.equals(HORSEMAN_KIT)) {
+							p.closeInventory();
 							Location l = p.getLocation();
 							World w = l.getWorld();
 							Horse h = w.spawn(l, Horse.class);
@@ -247,6 +257,9 @@ public class CommandKit implements CommandExecutor, Listener {
 							h.setColor(Color.BLACK);
 							h.setOwner(p);
 							h.setPassenger(p);
+							
+							String msg = Util.color("&cYou selected the Horseman kit");
+							p.sendMessage(msg);
 						}
 					} 
 				}
@@ -349,7 +362,8 @@ public class CommandKit implements CommandExecutor, Listener {
 				return true;
 			}
 			else {
-				String error = String.format(ChatColor.RED + "You must wait " + ChatColor.GOLD + "%1s " + ChatColor.RED + "seconds before using another special ability!", time);
+				String f = Util.color("&cYou must wait &6%1s &cseconds before using another special ability!");
+				String error = String.format(f, time);
 				p.sendMessage(error);
 				return false;
 			}
