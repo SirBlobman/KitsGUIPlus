@@ -2,6 +2,7 @@ package com.SirLinkups.kitsgui.command;
 
 import static com.SirLinkups.kitsgui.utility.KitsUtil.*;
 
+import com.SirLinkups.kitsgui.Core;
 import com.SirLinkups.kitsgui.utility.Util;
 
 import org.bukkit.Bukkit;
@@ -54,12 +55,14 @@ public class CommandKit implements CommandExecutor, Listener {
 	private static final ItemStack HORSEMAN_KIT = newSpawnEgg(EntityType.HORSE, "&b&lHorseman");
 	private static final ItemStack TROLL_KIT = newHead("Troll", "&b&lTroll");
 	private static final ItemStack VIPER_KIT = newItem(Material.WOOL, 1, 15, "&b&lViper");
+	private static final ItemStack IRONMAN_KIT = newItem(Material.IRON_HELMET, 1, 0, "&b&lIron Man");
 	
 	//Kit Related
 	private static final ItemStack KANGAROO_FIREWORK = newItem(Material.FIREWORK, 1, 0, "&2Ultra Jump");
 	private static final ItemStack SNOWMAN_SNOWBALL = newItem(Material.SNOW_BALL, 16, 0, "&bUltra Snowball");
 	private static final ItemStack HULK_SWORD = newItem(Material.STONE_SWORD, 1, 0, "&2&lHulk Sword");
 	private static final ItemStack VIPER_WOOL = newItem(Material.WOOL, 1, 15, "&8&lPoisonous Wool", "&a&oRight click to poison enemies..."); 
+	private static final ItemStack IRONMAN_FEATHER = newItem(Material.FEATHER, 1, 0, "&fRocket Boosters", "&a&oRight click to fly for 10 seconds...");
 	
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -94,7 +97,7 @@ public class CommandKit implements CommandExecutor, Listener {
 				if(name != null && name.equals(TITLE)) {
 					e.setCancelled(true);
 					ItemStack is = e.getCurrentItem();
-					if(!air(is)) {
+					if(!air(is) && !equal(is, SKULL) && !equal(is, BARS)) {
 						PlayerInventory pi = p.getInventory();
 						if(equal(is, KANGAROO_KIT)) {
 							p.closeInventory();
@@ -306,6 +309,21 @@ public class CommandKit implements CommandExecutor, Listener {
 							String msg = Util.color("&cYou selected the Viper kit");
 							p.sendMessage(msg);		
 							HAS_KIT.add(p);	
+						} else if(equal(is, IRONMAN_KIT)) {
+							p.closeInventory();
+							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
+							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
+							ItemStack legs = newItem(Material.CHAINMAIL_LEGGINGS, 1);
+							ItemStack boot = newItem(Material.CHAINMAIL_BOOTS, 1);
+							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
+							ItemStack sword = newItem(Material.STONE_SWORD, 1);
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, soup, sword, IRONMAN_FEATHER};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Iron Man kit");
+							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						}
 					} 
 				}
@@ -368,6 +386,23 @@ public class CommandKit implements CommandExecutor, Listener {
 						}
 						addCooldown(p);
 					}
+				} else if(equal(is, IRONMAN_FEATHER)) {
+					e.setCancelled(true);
+					boolean use = cooldown(p);
+					if(use) {
+						p.setAllowFlight(true);
+						p.setFlying(true);
+						Bukkit.getScheduler().runTaskLater(Core.INSTANCE, new Runnable() {
+							public void run() {
+								p.setAllowFlight(false);
+								p.setFlying(false);
+								String msg = "Critical battery... shutting off boosters...";
+								p.sendMessage(msg);
+							}
+						}, 200L);
+						p.sendMessage("Woooosh!");
+						addCooldown(p);
+					}
 				}
 			}
 		}
@@ -412,7 +447,7 @@ public class CommandKit implements CommandExecutor, Listener {
 		ItemStack[] inv = new ItemStack[] {
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
 			BARS, KANGAROO_KIT, SWORDSMAN_KIT, ARCHER_KIT, SNOWMAN_KIT, FISHERMAN_KIT, NINJA_KIT, ENDERMAN_KIT, BARS,
-			BARS, STRAFE_KIT, HULK_KIT, HORSEMAN_KIT, CACTUS_KIT, TROLL_KIT, VIPER_KIT, AIR, BARS,
+			BARS, STRAFE_KIT, HULK_KIT, HORSEMAN_KIT, CACTUS_KIT, TROLL_KIT, VIPER_KIT, IRONMAN_KIT, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL
