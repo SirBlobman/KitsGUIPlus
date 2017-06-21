@@ -1,7 +1,5 @@
 package com.SirLinkups.kitsgui.utility;
 
-import java.util.List;
-
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -11,10 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.SpawnEgg;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
 
 public class KitsUtil extends Util {
 	public static boolean air(ItemStack is) {
@@ -91,11 +90,27 @@ public class KitsUtil extends Util {
 	}
 	
 	public static ItemStack newSpawnEgg(EntityType et, String name) {
-		ItemStack is = newItem(Material.MONSTER_EGG, 1, 0, name);
-		MaterialData md = is.getData();
-		SpawnEgg se = (SpawnEgg) md;
-		se.setSpawnedType(et);
-		is.setData(se);
+		ItemStack is = newSpawnEgg(et, 1);
+		ItemMeta meta = is.getItemMeta();
+		String disp = color(name);
+		meta.setDisplayName(disp);
+		is.setItemMeta(meta);
+		return is;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static ItemStack newSpawnEgg(EntityType et, int amount) {
+		int id = et.getTypeId();
+		ItemStack is = newItem(Material.MONSTER_EGG, amount, id);
+		return is;
+	}
+	
+	public static ItemStack newHead(String owner, String name) {
+		ItemStack is = newItem(Material.SKULL_ITEM, 1, 3, name);
+		ItemMeta meta = is.getItemMeta();
+		SkullMeta sm = (SkullMeta) meta;
+		sm.setOwner(owner);
+		is.setItemMeta(meta);
 		return is;
 	}
 }

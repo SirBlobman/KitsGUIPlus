@@ -1,14 +1,10 @@
 package com.SirLinkups.kitsgui.command;
 
-import static com.SirLinkups.kitsgui.utility.KitsUtil.newItem;
-import static com.SirLinkups.kitsgui.utility.KitsUtil.newLeather;
-import static com.SirLinkups.kitsgui.utility.KitsUtil.newSpawnEgg;
+import static com.SirLinkups.kitsgui.utility.KitsUtil.*;
 
-import java.util.List;
-import java.util.Map;
+import com.SirLinkups.kitsgui.utility.Util;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,12 +12,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Horse;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Horse.Color;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -29,17 +21,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.HorseInventory;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.SirLinkups.kitsgui.utility.KitsUtil;
-import com.SirLinkups.kitsgui.utility.Util;
+import java.util.List;
+import java.util.Map;
 
 public class CommandKit implements CommandExecutor, Listener {
 	private static Map<Player, Long> cooldown = Util.newMap();
@@ -61,11 +50,14 @@ public class CommandKit implements CommandExecutor, Listener {
 	private static final ItemStack HULK_KIT = newItem(Material.STAINED_CLAY, 1, 13, "&b&lHulk");
 	private static final ItemStack CACTUS_KIT = newItem(Material.CACTUS, 1, 0, "&b&lCactus");
 	private static final ItemStack HORSEMAN_KIT = newSpawnEgg(EntityType.HORSE, "&b&lHorseman");
+	private static final ItemStack TROLL_KIT = newHead("Troll", "&b&lTroll");
+	private static final ItemStack VIPER_KIT = newItem(Material.WOOL, 1, 15, "&b&lViper");
 	
 	//Kit Related
 	private static final ItemStack KANGAROO_FIREWORK = newItem(Material.FIREWORK, 1, 0, "&2Ultra Jump");
-	private static final ItemStack SNOWMAN_SNOWBALL = newItem(Material.SNOW_BALL, 1, 0, "&bUltra Snowball");
+	private static final ItemStack SNOWMAN_SNOWBALL = newItem(Material.SNOW_BALL, 16, 0, "&bUltra Snowball");
 	private static final ItemStack HULK_SWORD = newItem(Material.STONE_SWORD, 1, 0, "&2&lHulk Sword");
+	private static final ItemStack VIPER_WOOL = newItem(Material.WOOL, 1, 15, "&8&lPoisonous Wool", "&a&oRight click to poison enemies..."); 
 	
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
@@ -94,9 +86,9 @@ public class CommandKit implements CommandExecutor, Listener {
 				if(name != null && name.equals(TITLE)) {
 					e.setCancelled(true);
 					ItemStack is = e.getCurrentItem();
-					if(!KitsUtil.air(is)) {
+					if(!air(is)) {
 						PlayerInventory pi = p.getInventory();
-						if(is.equals(KANGAROO_KIT)) {
+						if(equal(is, KANGAROO_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
@@ -111,14 +103,14 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Kangaroo kit");
 							p.sendMessage(msg);
-						} else if(is.equals(SWORDSMAN_KIT)) {
+						} else if(equal(is, SWORDSMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
 							ItemStack boot = newItem(Material.IRON_BOOTS, 1);
 							ItemStack sword = newItem(Material.STONE_SWORD, 1);
-							sword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+							sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 2);
 							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 12);
 							
 							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword, soup};
@@ -126,7 +118,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Swordsman kit");
 							p.sendMessage(msg);
-						} else if(is.equals(ARCHER_KIT)) {
+						} else if(equal(is, ARCHER_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
@@ -134,8 +126,8 @@ public class CommandKit implements CommandExecutor, Listener {
 							ItemStack boot = newItem(Material.CHAINMAIL_BOOTS, 1);
 							ItemStack sword = newItem(Material.STONE_SWORD, 1);
 							ItemStack bow = newItem(Material.BOW, 1);
-							bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
-							bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+							bow.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
+							bow.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 1);
 							ItemStack arrow = newItem(Material.ARROW, 1);
 							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 24);
 							
@@ -144,7 +136,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Archer kit");
 							p.sendMessage(msg);
-						} else if(is.equals(SNOWMAN_KIT)) {
+						} else if(equal(is, SNOWMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
@@ -157,7 +149,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Snowman kit");
 							p.sendMessage(msg);
-						} else if(is.equals(FISHERMAN_KIT)) {
+						} else if(equal(is, FISHERMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
@@ -171,14 +163,14 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Fisherman kit");
 							p.sendMessage(msg);
-						} else if(is.equals(NINJA_KIT)) {
+						} else if(equal(is, NINJA_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.IRON_CHESTPLATE, 1);
 							ItemStack legs = newItem(Material.IRON_LEGGINGS, 1);
 							ItemStack boot = newItem(Material.IRON_BOOTS, 1);
 							ItemStack star = newItem(Material.NETHER_STAR, 1);
-							star.addEnchantment(Enchantment.DAMAGE_ALL, 3);
+							star.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
 							ItemStack soup = newItem(Material.MUSHROOM_SOUP, 20);
 							
 							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, soup, star};
@@ -186,7 +178,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Ninja kit");
 							p.sendMessage(msg);
-						} else if(is.equals(ENDERMAN_KIT)) {
+						} else if(equal(is, ENDERMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
@@ -201,7 +193,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Enderman kit");
 							p.sendMessage(msg);
-						} else if(is.equals(STRAFE_KIT)) {
+						} else if(equal(is, STRAFE_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
 							ItemStack ches = newItem(Material.CHAINMAIL_CHESTPLATE, 1);
@@ -219,7 +211,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							PotionEffectType fast = PotionEffectType.SPEED;
 							PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
 							p.addPotionEffect(pe, true);
-						} else if(is.equals(HULK_KIT)) {
+						} else if(equal(is, HULK_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 21, 130, 2, "Hulk Helmet");
 							ItemStack ches = newLeather(EquipmentSlot.CHEST, 21, 130, 2, "Hulk Chestplate");
@@ -232,16 +224,16 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Hulk kit");
 							p.sendMessage(msg);
-						} else if(is.equals(CACTUS_KIT)) {
+						} else if(equal(is, CACTUS_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 0, 255, 0, "&2Cactus Helmet");
 							ItemStack ches = newLeather(EquipmentSlot.CHEST, 0, 255, 0, "&2Cactus Chestplate");
 							ItemStack legs = newLeather(EquipmentSlot.LEGS, 0, 255, 0, "&2Cactus Leggings");
 							ItemStack boot = newLeather(EquipmentSlot.FEET, 0, 255, 0, "&2Cactus Boots");
-							helm.addEnchantment(Enchantment.THORNS, 5);
-							ches.addEnchantment(Enchantment.THORNS, 5);
-							legs.addEnchantment(Enchantment.THORNS, 5);
-							boot.addEnchantment(Enchantment.THORNS, 5);
+							helm.addUnsafeEnchantment(Enchantment.THORNS, 5);
+							ches.addUnsafeEnchantment(Enchantment.THORNS, 5);
+							legs.addUnsafeEnchantment(Enchantment.THORNS, 5);
+							boot.addUnsafeEnchantment(Enchantment.THORNS, 5);
 							ItemStack sword = newItem(Material.WOOD_SWORD, 1);
 							
 							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, sword};
@@ -249,7 +241,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Cactus kit");
 							p.sendMessage(msg);
-						} else if(is.equals(HORSEMAN_KIT)) {
+						} else if(equal(is, HORSEMAN_KIT)) {
 							p.closeInventory();
 							Location l = p.getLocation();
 							World w = l.getWorld();
@@ -269,6 +261,30 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(sword);
 							String msg = Util.color("&cYou selected the Horseman kit");
 							p.sendMessage(msg);
+						} else if(equal(is, TROLL_KIT)) {
+							p.closeInventory();		
+							ItemStack mask = newHead("Troll", "&fTroll Mask");
+							ItemStack web = newItem(Material.WEB, 64);
+							ItemStack creeper = newSpawnEgg(EntityType.CREEPER, 16);
+							ItemStack lava = newItem(Material.LAVA_BUCKET, 1);
+							
+							ItemStack[] add = new ItemStack[] {mask, web, creeper, lava};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Troll kit");
+							p.sendMessage(msg);
+						} else if(equal(is, VIPER_KIT)) {
+							p.closeInventory();
+							ItemStack helm = newLeather(EquipmentSlot.HEAD, 0, 0, 0, "&0Viper Helmet");
+							ItemStack ches = newLeather(EquipmentSlot.CHEST, 0, 0, 0, "&0Viper Chestplate");
+							ItemStack legs = newLeather(EquipmentSlot.LEGS, 0, 0, 0, "&0Viper Leggings");
+							ItemStack boot = newLeather(EquipmentSlot.FEET, 0, 0, 0, "&0Viper Boots");
+							
+							ItemStack[] add = new ItemStack[] {helm, ches, legs, boot, VIPER_WOOL};
+							pi.clear();
+							pi.addItem(add);
+							String msg = Util.color("&cYou selected the Viper kit");
+							p.sendMessage(msg);			
 						}
 					} 
 				}
@@ -284,8 +300,8 @@ public class CommandKit implements CommandExecutor, Listener {
 		Action a = e.getAction();
 		if(a == Action.RIGHT_CLICK_AIR || a == Action.RIGHT_CLICK_BLOCK) {
 			ItemStack is = e.getItem();
-			if(!KitsUtil.air(is)) {
-				if(is.equals(KANGAROO_FIREWORK)) {
+			if(!air(is)) {
+				if(equal(is, KANGAROO_FIREWORK)) {
 					e.setCancelled(true);
 					boolean use = cooldown(p);
 					if(use) {
@@ -298,7 +314,7 @@ public class CommandKit implements CommandExecutor, Listener {
 						p.sendMessage(msg);
 						addCooldown(p);
 					}
-				} else if(is.equals(SNOWMAN_SNOWBALL)) {
+				} else if(equal(is, SNOWMAN_SNOWBALL)) {
 					e.setCancelled(true);
 					boolean use = cooldown(p);
 					if(use) {
@@ -311,6 +327,24 @@ public class CommandKit implements CommandExecutor, Listener {
 						Vector ad = v.add(m);
 						Location s = ad.toLocation(w, eye.getYaw(), eye.getPitch());
 						w.spawn(s, Fireball.class);
+						addCooldown(p);
+					}
+				} else if(equal(is, VIPER_WOOL)) {
+					e.setCancelled(true);
+					boolean use = cooldown(p);
+					if(use) {
+						List<Entity> ent = p.getNearbyEntities(5, 5, 5);
+						for(Entity en : ent) {
+							if(en instanceof LivingEntity) {
+								LivingEntity le = (LivingEntity) en;
+								PotionEffectType P = PotionEffectType.POISON;
+								PotionEffectType B = PotionEffectType.BLINDNESS;
+								PotionEffect pe = new PotionEffect(P, 9, 5);
+								PotionEffect be = new PotionEffect(B, 9, 5);
+								le.addPotionEffect(pe);
+								le.addPotionEffect(be);
+							}
+						}
 						addCooldown(p);
 					}
 				}
@@ -331,7 +365,7 @@ public class CommandKit implements CommandExecutor, Listener {
 		if(p.isSneaking() && p.isOnGround() && HULK_SMASH.contains(p)) {
 			PlayerInventory pi = p.getInventory();
 			ItemStack is = pi.getItemInHand();
-			if(!KitsUtil.air(is) && is.equals(HULK_SWORD)) {
+			if(!air(is) && is.equals(HULK_SWORD)) {
 				if(cooldown(p)) {
 					PotionEffectType pet = PotionEffectType.DAMAGE_RESISTANCE;
 					PotionEffect pe = new PotionEffect(pet, 2, 255);
@@ -351,7 +385,7 @@ public class CommandKit implements CommandExecutor, Listener {
 		ItemStack[] inv = new ItemStack[] {
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
 			BARS, KANGAROO_KIT, SWORDSMAN_KIT, ARCHER_KIT, SNOWMAN_KIT, FISHERMAN_KIT, NINJA_KIT, ENDERMAN_KIT, BARS,
-			BARS, STRAFE_KIT, HULK_KIT, HORSEMAN_KIT, CACTUS_KIT, AIR, AIR, AIR, BARS,
+			BARS, STRAFE_KIT, HULK_KIT, HORSEMAN_KIT, CACTUS_KIT, TROLL_KIT, VIPER_KIT, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			BARS, AIR, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
 			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL
@@ -383,5 +417,24 @@ public class CommandKit implements CommandExecutor, Listener {
 		long c = System.currentTimeMillis();
 		long l = c + (50 * 1000L);
 		cooldown.put(p, l);
+	}
+	
+	private boolean equal(ItemStack is1, ItemStack is2) {
+		if(air(is1) || air(is2)) return false;
+		else if(is1 == is2) return true;
+		else if(is1.equals(is2)) return true;
+		else {
+			ItemMeta m1 = is1.getItemMeta();
+			ItemMeta m2 = is2.getItemMeta();
+			if(m1.hasDisplayName() && m2.hasDisplayName()) {
+				String name1 = m1.getDisplayName();
+				String name2 = m2.getDisplayName();
+				return name1.equals(name2);
+			} else {
+				Material mat1 = is1.getType();
+				Material mat2 = is2.getType();
+				return (mat1 == mat2);
+			}
+		}
 	}
 }

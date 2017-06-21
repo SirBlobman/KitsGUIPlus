@@ -36,6 +36,7 @@ public class Util {
 		double dkills = kills;
 		double ddeath = deaths;
 		double kdr = (dkills / ddeath);
+		if(kdr == Double.NaN || kdr == 0) kdr = dkills;
 		int level = Math.round((kills / 5));
 		int coins = ConfigDatabase.coins(p);
 		
