@@ -1,12 +1,15 @@
 package com.SirLinkups.kitsgui.config;
 
-import java.io.File;
-import java.util.UUID;
+import com.SirLinkups.kitsgui.special.DonorKit;
+import com.SirLinkups.kitsgui.utility.Util;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
-import com.SirLinkups.kitsgui.utility.Util;
+import java.io.File;
+import java.util.List;
+import java.util.UUID;
 
 public class ConfigDatabase extends Config {
 	private static final File USERS = new File(FOLDER, "users");
@@ -44,9 +47,11 @@ public class ConfigDatabase extends Config {
 	private static void defaults(OfflinePlayer op, YamlConfiguration config) {
 		String username = op.getName();
 		int coins = 0;
+		List<String> bought = Util.newList();
 		
 		set(config, "username", username, true);
 		set(config, "coins", coins, false);
+		set(config, "bought kits", bought, false);
 		File file = file(op);
 		save(config, file);
 	}
@@ -64,10 +69,63 @@ public class ConfigDatabase extends Config {
 	}
 	
 	public static void addCoin(OfflinePlayer op) {
-		YamlConfiguration config = load(op);
 		int coins = coins(op);
 		int n = coins + 1;
-		set(config, "coins", n, true);
+		setCoins(op, n);
+	}
+	
+	public static void setCoins(OfflinePlayer op, int amount) {
+		YamlConfiguration config = load(op);
+		set(config, "coins", amount, true);
 		save(config, file(op));
+	}
+	
+	public static void buyKit(OfflinePlayer op, DonorKit dk) {
+		int coins = coins(op);
+		int price = dk.getCoinCost();
+		if(coins >= price) {
+			int n = coins - price;
+			setCoins(op, n);
+			if(op.isOnline()) {
+				Player p = op.getPlayer();
+				p.closeInventory();
+				p.sendMessage("You just bought the kit '" + dk.getName() + "'.");
+			}
+			YamlConfiguration config = load(op);
+			List<String> list = config.getStringList("bought kits");
+			String name = dk.name();
+			list.add(name);
+			set(config, "bought kits", list, true);
+			save(config, file(op));
+			
+		} else {
+			if(op.isOnline()) {
+				Player p = op.getPlayer();
+				p.closeInventory();
+				String error = "You don't have enough coins!";
+				p.sendMessage(error);
+			}
+			return;
+		}
+	}
+	
+	public static List<DonorKit> bought(OfflinePlayer op) {
+		List<DonorKit> list = Util.newList();
+		YamlConfiguration config = load(op);
+		List<String> ss = config.getStringList("bought kits");
+		for(String s : ss) {
+			DonorKit dk = DonorKit.valueOf(s);
+			Util.print(op.getName() + " " + dk.name());
+			list.add(dk);
+		}
+		return list;
+	}
+	
+	public static boolean bought(OfflinePlayer op, DonorKit dk) {
+		YamlConfiguration config = load(op);
+		List<String> ss = config.getStringList("bought kits");
+		String name = dk.name();
+		boolean b = ss.contains(name);
+		return b;
 	}
 }

@@ -3,6 +3,7 @@ package com.SirLinkups.kitsgui.utility;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Map;
 
 public class KitsUtil extends Util {
 	public static boolean air(ItemStack is) {
@@ -21,6 +23,41 @@ public class KitsUtil extends Util {
 		Material mat = is.getType();
 		boolean air = (mat == Material.AIR);
 		return air;
+	}
+	
+	public static boolean equal(ItemStack is1, ItemStack is2) {
+		if(air(is1) || air(is2)) return false;
+		ItemStack c1 = is1.clone();
+		ItemStack c2 = is2.clone();
+		c1.setAmount(1);
+		c2.setAmount(1);
+		return c1.equals(c2);
+	}
+
+	private static Map<Player, Long> cooldown = Util.newMap();
+	public static boolean cooldown(Player p) {
+		if(cooldown.containsKey(p)) {
+			long l = cooldown.get(p);
+			long c = System.currentTimeMillis();
+			long t = l - c;
+			int time = (int) (t / 1000L);
+			if(time <= 0) {
+				cooldown.remove(p);
+				return true;
+			}
+			else {
+				String f = Util.color("&cYou must wait &6%1s &cseconds before using another special ability!");
+				String error = String.format(f, time);
+				p.sendMessage(error);
+				return false;
+			}
+		} else return true;
+	}
+	
+	public static void addCooldown(Player p) {
+		long c = System.currentTimeMillis();
+		long l = c + (50 * 1000L);
+		cooldown.put(p, l);
 	}
 	
 	public static ItemStack newItem(Material mat) {
@@ -112,5 +149,15 @@ public class KitsUtil extends Util {
 		sm.setOwner(owner);
 		is.setItemMeta(meta);
 		return is;
+	}
+	
+	public static ItemStack addLore(ItemStack is, String... lore) {
+		if(air(is)) return is;
+		ItemStack in = is.clone();
+		List<String> list = newList(color(lore));
+		ItemMeta meta = in.getItemMeta();
+		meta.setLore(list);
+		in.setItemMeta(meta);
+		return in;
 	}
 }

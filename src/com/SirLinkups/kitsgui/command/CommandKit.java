@@ -24,24 +24,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.List;
-import java.util.Map;
 
 public class CommandKit implements CommandExecutor, Listener {
-	private static Map<Player, Long> cooldown = Util.newMap();
-	private static List<Player> HAS_KIT = Util.newList();
+	public static List<Player> HAS_KIT = Util.newList();
 	private static List<Player> HULK_SMASH = Util.newList();
 	
 	//Gui Related
 	private static final String TITLE = Util.color("&1&lKits");
 	private static final ItemStack AIR = newItem(Material.AIR);
-	private static final ItemStack SKULL = newItem(Material.SKULL_ITEM, 1, 0, "");
-	private static final ItemStack BARS = newItem(Material.IRON_FENCE, 1, 0, "");
+	private static final ItemStack SKULL = newItem(Material.SKULL_ITEM, 1, 0, "&f");
+	private static final ItemStack BARS = newItem(Material.IRON_FENCE, 1, 0, "&f");
 	private static final ItemStack KANGAROO_KIT = newItem(Material.FIREWORK, 1, 0, "&b&lKangaroo");
 	private static final ItemStack SWORDSMAN_KIT = newItem(Material.STONE_SWORD, 1, 0, "&b&lSwordsman");
 	private static final ItemStack ARCHER_KIT = newItem(Material.BOW, 1, 0, "&b&lArcher");
@@ -53,7 +50,7 @@ public class CommandKit implements CommandExecutor, Listener {
 	private static final ItemStack HULK_KIT = newItem(Material.STAINED_CLAY, 1, 13, "&b&lHulk");
 	private static final ItemStack CACTUS_KIT = newItem(Material.CACTUS, 1, 0, "&b&lCactus");
 	private static final ItemStack HORSEMAN_KIT = newSpawnEgg(EntityType.HORSE, "&b&lHorseman");
-	private static final ItemStack TROLL_KIT = newHead("Troll", "&b&lTroll");
+	private static final ItemStack TROLL_KIT = newItem(Material.TNT, 1, 0, "&b&lTroll");
 	private static final ItemStack VIPER_KIT = newItem(Material.WOOL, 1, 15, "&b&lViper");
 	private static final ItemStack IRONMAN_KIT = newItem(Material.IRON_HELMET, 1, 0, "&b&lIron Man");
 	
@@ -454,49 +451,5 @@ public class CommandKit implements CommandExecutor, Listener {
 		};
 		i.setContents(inv);
 		return i;
-	}
-	
-	private boolean cooldown(Player p) {
-		if(cooldown.containsKey(p)) {
-			long l = cooldown.get(p);
-			long c = System.currentTimeMillis();
-			long t = l - c;
-			int time = (int) (t / 1000L);
-			if(time <= 0) {
-				cooldown.remove(p);
-				return true;
-			}
-			else {
-				String f = Util.color("&cYou must wait &6%1s &cseconds before using another special ability!");
-				String error = String.format(f, time);
-				p.sendMessage(error);
-				return false;
-			}
-		} else return true;
-	}
-	
-	private void addCooldown(Player p) {
-		long c = System.currentTimeMillis();
-		long l = c + (50 * 1000L);
-		cooldown.put(p, l);
-	}
-	
-	private boolean equal(ItemStack is1, ItemStack is2) {
-		if(air(is1) || air(is2)) return false;
-		else if(is1 == is2) return true;
-		else if(is1.equals(is2)) return true;
-		else {
-			ItemMeta m1 = is1.getItemMeta();
-			ItemMeta m2 = is2.getItemMeta();
-			if(m1.hasDisplayName() && m2.hasDisplayName()) {
-				String name1 = m1.getDisplayName();
-				String name2 = m2.getDisplayName();
-				return name1.equals(name2);
-			} else {
-				Material mat1 = is1.getType();
-				Material mat2 = is2.getType();
-				return (mat1 == mat2);
-			}
-		}
 	}
 }
