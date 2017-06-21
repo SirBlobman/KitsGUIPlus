@@ -17,6 +17,7 @@ import org.bukkit.entity.Horse.Color;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 public class CommandKit implements CommandExecutor, Listener {
 	private static Map<Player, Long> cooldown = Util.newMap();
+	private static List<Player> HAS_KIT = Util.newList();
 	private static List<Player> HULK_SMASH = Util.newList();
 	
 	//Gui Related
@@ -65,8 +67,14 @@ public class CommandKit implements CommandExecutor, Listener {
 		if(c.equals("kit")) {
 			if(cs instanceof Player) {
 				Player p = (Player) cs;
-				p.openInventory(gui());
-				return true;
+				if(HAS_KIT.contains(p)) {
+					String error = "You already have a kit!";
+					p.sendMessage(error);
+					return true;
+				} else {
+					p.openInventory(gui());
+					return true;
+				}
 			} else {
 				String error = "You are not a Player";
 				cs.sendMessage(error);
@@ -103,6 +111,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Kangaroo kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, SWORDSMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -118,6 +127,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Swordsman kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, ARCHER_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
@@ -136,6 +146,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Archer kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, SNOWMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -149,6 +160,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Snowman kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, FISHERMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -163,6 +175,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Fisherman kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, NINJA_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -178,6 +191,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Ninja kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, ENDERMAN_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.CHAINMAIL_HELMET, 1);
@@ -193,6 +207,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Enderman kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, STRAFE_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newItem(Material.IRON_HELMET, 1);
@@ -211,6 +226,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							PotionEffectType fast = PotionEffectType.SPEED;
 							PotionEffect pe = new PotionEffect(fast, Integer.MAX_VALUE, 1);
 							p.addPotionEffect(pe, true);
+							HAS_KIT.add(p);
 						} else if(equal(is, HULK_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 21, 130, 2, "Hulk Helmet");
@@ -224,6 +240,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Hulk kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, CACTUS_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 0, 255, 0, "&2Cactus Helmet");
@@ -241,6 +258,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Cactus kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, HORSEMAN_KIT)) {
 							p.closeInventory();
 							Location l = p.getLocation();
@@ -261,6 +279,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(sword);
 							String msg = Util.color("&cYou selected the Horseman kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, TROLL_KIT)) {
 							p.closeInventory();		
 							ItemStack mask = newHead("Troll", "&fTroll Mask");
@@ -273,6 +292,7 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Troll kit");
 							p.sendMessage(msg);
+							HAS_KIT.add(p);
 						} else if(equal(is, VIPER_KIT)) {
 							p.closeInventory();
 							ItemStack helm = newLeather(EquipmentSlot.HEAD, 0, 0, 0, "&0Viper Helmet");
@@ -284,7 +304,8 @@ public class CommandKit implements CommandExecutor, Listener {
 							pi.clear();
 							pi.addItem(add);
 							String msg = Util.color("&cYou selected the Viper kit");
-							p.sendMessage(msg);			
+							p.sendMessage(msg);		
+							HAS_KIT.add(p);	
 						}
 					} 
 				}
@@ -378,6 +399,12 @@ public class CommandKit implements CommandExecutor, Listener {
 				} else HULK_SMASH.remove(p);
 			} else HULK_SMASH.remove(p);
 		}
+	}
+	
+	@EventHandler
+	public void die(PlayerDeathEvent e) {
+		Player p = e.getEntity();
+		if(HAS_KIT.contains(p)) HAS_KIT.remove(p);
 	}
 	
 	private Inventory gui() {
