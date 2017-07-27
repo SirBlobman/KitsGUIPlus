@@ -29,7 +29,7 @@ public class Util {
 		return ss;
 	}
 	
-	public static String format(Object o, Player p) {
+	public static String format(Object o, Player p, Object... oo) {
 		String s = str(o);
 		int kills = p.getStatistic(Statistic.PLAYER_KILLS);
 		int deaths = p.getStatistic(Statistic.DEATHS);
@@ -38,14 +38,34 @@ public class Util {
 		double kdr = (dkills / ddeath);
 		if(kdr == Double.NaN || kdr == 0) kdr = dkills;
 		int level = Math.round((kills / 5));
+		int next = (5 - (kills % 5));
 		int coins = ConfigDatabase.coins(p);
 		
 		String k = s.replace("%kills%", str(kills));
 		String d = k.replace("%deaths%", str(deaths));
 		String kd = d.replace("%kdr%", str(kdr));
 		String l = kd.replace("%level%", str(level));
-		String c = l.replace("%coins%", str(coins));
-		return c;
+		String nl = l.replace("%next_level%", str(next));
+		String c = nl.replace("%coins%", str(coins));
+		String f = format(c, oo);
+		return f;
+	}
+	
+	public static String format(Object o, Object... oo) {
+	    String s = str(o);
+	    Object[] ss = str(oo);
+	    String f = String.format(s, ss);
+	    String c = color(f);
+	    return c;
+	}
+	
+	public static String[] str(Object... oo) {
+	    String[] ss = new String[oo.length];
+	    for(int i = 0; i < oo.length; i++) {
+	        Object o = oo[i];
+	        String s = str(o);
+	        ss[i] = s;
+	    } return ss;
 	}
 	
 	public static String str(Object o) {

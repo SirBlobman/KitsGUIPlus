@@ -1,8 +1,12 @@
 name: KitsGUIPlus
 main: com.SirLinkups.kitsgui.Core
-authors: [Linkups, SirBlobman]
+authors: [SirBlobman, Linkups]
 version: 1.0
 commands:
+   createkit:
+     description: Create a new kit
+     aliases: [makekit, newkit, addkit]
+     usage: /<command> <name> <in shop (yes/no)> [price in coins]
    kit:
       description: Open the GUI for the kits
       aliases: [kits]

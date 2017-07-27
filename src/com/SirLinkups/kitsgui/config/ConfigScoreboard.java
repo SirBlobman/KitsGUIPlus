@@ -34,14 +34,11 @@ public class ConfigScoreboard extends Config {
 	private static void defaults() {
 		List<String> list = Util.newList(
 			"&8&m---------------------",
-			"&b&lKills &f&l>",
-			"&7%kills%",
-			"&b&lLevel &f&l>",
-			"&7%level%",
-			"&b&lDeaths &f&l>",
-			"&7%deaths%",
-			"&b&lKDR &f&l>",
-			"&7%kdr%"
+			"&b&lKills &f&l> &7%kills%",
+			"&b&lLevel &f&l> &7%level%",
+			"&b&lLevel Up&f&l> &7%next_level%",
+			"&b&lDeaths &f&l> &7%deaths%",
+			"&b&lKDR &f&l> &7%kdr%"
 		);
 		set("title", "&b&lKitsGui+", false);
 		set("lines", list, false);

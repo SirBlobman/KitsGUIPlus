@@ -18,7 +18,7 @@ public class ScoreboardUtil extends Util implements Runnable {
 	private static final BukkitScheduler BS = SERVER.getScheduler();
 	private static final ScoreboardManager SM = SERVER.getScoreboardManager();
 	
-	private static List<String> DISABLED = newList();
+	private static List<Player> DISABLED = newList();
 	public static void load() {
 		BS.runTaskTimer(Core.INSTANCE, new ScoreboardUtil(), 20L, 200L);
 	}

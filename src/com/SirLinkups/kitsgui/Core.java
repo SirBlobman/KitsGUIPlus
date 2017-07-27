@@ -3,13 +3,16 @@ package com.SirLinkups.kitsgui;
 import com.SirLinkups.kitsgui.command.CommandKit;
 import com.SirLinkups.kitsgui.command.CommandMain;
 import com.SirLinkups.kitsgui.command.CommandShop;
-import com.SirLinkups.kitsgui.listener.ListenCoins;
+import com.SirLinkups.kitsgui.config.ConfigConfig;
+import com.SirLinkups.kitsgui.listener.ListenDeath;
 import com.SirLinkups.kitsgui.special.DonorItem;
 import com.SirLinkups.kitsgui.utility.ScoreboardUtil;
 import com.SirLinkups.kitsgui.utility.Util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.command.*;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,18 +30,38 @@ public class Core extends JavaPlugin {
 		INSTANCE = this;
 		FOLDER = getDataFolder();
 		ScoreboardUtil.load();
+		ConfigConfig.load();
 		getCommand("kit").setExecutor(new CommandKit());
 		getCommand("kit").setPermissionMessage(Util.color("&cYou don't have the permission &bkitsgui.kits"));
 		getCommand("kitsguiplus").setExecutor(new CommandMain());
 		getCommand("kitshop").setExecutor(new CommandShop());
 		PM.registerEvents(new CommandKit(), this);
 		PM.registerEvents(new CommandShop(), this);
-		PM.registerEvents(new ListenCoins(), this);
+		PM.registerEvents(new ListenDeath(), this);
 		PM.registerEvents(new DonorItem(), this);
 	}
 	
-	@Override
-	public void onDisable() {
-		
-	}
+	public void command(String cmd, CommandExecutor ce) {
+        PluginCommand pc = getCommand(cmd);
+        if(pc != null) {
+            if(ce != null) {
+                pc.setExecutor(ce);
+                if(ce instanceof TabCompleter) {
+                    TabCompleter tc = (TabCompleter) ce;
+                    pc.setTabCompleter(tc);
+                }
+                
+                if(ce instanceof Listener) {
+                    Listener l = (Listener) ce;
+                    PM.registerEvents(l, this);
+                }
+            } else {
+                String error = Util.format("The command '%1s' cannot have a NULL executor", cmd);
+                Util.print(error);
+            }
+        } else {
+            String error = Util.format("The command '%1s' is not inside of the 'plugin.yml' of CombatLogX", cmd);
+            Util.print(error);
+        }
+    }
 }
