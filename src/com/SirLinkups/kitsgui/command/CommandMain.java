@@ -16,18 +16,18 @@ public class CommandMain implements CommandExecutor {
 			int len = args.length;
 			if(len == 0) {
 				String[] msg = Util.color(
-						"&7&m------------------------------",
-						"&c            KitsGui+",
-						"",
-						"&6/kgp - Main Command",
-						"&6/kgp reload - Reload the config",
-						"&6/kit - Opens the Kit GUI",
-						"&6/kgp version - Shows the version of the plugin",
-						"",
-						"&7&m------------------------------"
-					);
-					cs.sendMessage(msg);
-					return true;
+					"&7&m------------------------------",
+					"&c            KitsGui+",
+					"",
+					"&6/kgp - Main Command",
+					"&6/kgp reload - Reload the config",
+					"&6/kit - Opens the Kit GUI",
+					"&6/kgp version - Shows the version of the plugin",
+					"",
+					"&7&m------------------------------"
+				);
+				cs.sendMessage(msg);
+				return true;
 			} else {
 				String sub = args[0].toLowerCase();
 				if(sub.equals("reload")) {
