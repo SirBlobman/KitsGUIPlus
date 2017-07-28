@@ -22,6 +22,8 @@ public class CommandMain implements CommandExecutor {
 						"&6/kgp - Main Command",
 						"&6/kgp reload - Reload the config",
 						"&6/kit - Opens the Kit GUI",
+						"&6/kgp version - Shows the version of the plugin",
+						"",
 						"&7&m------------------------------"
 					);
 					cs.sendMessage(msg);
