@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.SirLinkups.kitsgui.Core;
 
-public class Config {
+class Config {
 	protected static final File FOLDER = Core.FOLDER;
 	
 	protected static YamlConfiguration load(File file) throws IOException, InvalidConfigurationException {

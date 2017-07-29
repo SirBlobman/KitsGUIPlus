@@ -1,16 +1,12 @@
 package com.SirLinkups.kitsgui;
 
-import com.SirLinkups.kitsgui.command.CommandKit;
-import com.SirLinkups.kitsgui.command.CommandMain;
-import com.SirLinkups.kitsgui.command.CommandShop;
+import com.SirLinkups.kitsgui.command.*;
 import com.SirLinkups.kitsgui.config.ConfigConfig;
 import com.SirLinkups.kitsgui.listener.ListenDeath;
 import com.SirLinkups.kitsgui.special.DonorItem;
-import com.SirLinkups.kitsgui.utility.ScoreboardUtil;
-import com.SirLinkups.kitsgui.utility.Util;
+import com.SirLinkups.kitsgui.utility.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -31,6 +27,7 @@ public class Core extends JavaPlugin {
 		FOLDER = getDataFolder();
 		ScoreboardUtil.load();
 		ConfigConfig.load();
+		getCommand("createkit").setExecutor(new CommandCreateKit());
 		getCommand("kit").setExecutor(new CommandKit());
 		getCommand("kit").setPermissionMessage(Util.color("&cYou don't have the permission &bkitsgui.kits"));
 		getCommand("kitsguiplus").setExecutor(new CommandMain());
