@@ -1,6 +1,6 @@
 package com.SirLinkups.kitsgui.config;
 
-import com.SirLinkups.kitsgui.special.DonorKit;
+import com.SirLinkups.kitsgui.config.serializable.DonorKit;
 import com.SirLinkups.kitsgui.utility.Util;
 
 import org.bukkit.OfflinePlayer;
@@ -8,8 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ConfigDatabase extends Config {
 	private static final File USERS = new File(FOLDER, "users");
@@ -82,7 +81,7 @@ public class ConfigDatabase extends Config {
 	
 	public static void buyKit(OfflinePlayer op, DonorKit dk) {
 		int coins = coins(op);
-		int price = dk.getCoinCost();
+		int price = dk.getPrice();
 		if(coins >= price) {
 			int n = coins - price;
 			setCoins(op, n);
@@ -93,11 +92,10 @@ public class ConfigDatabase extends Config {
 			}
 			YamlConfiguration config = load(op);
 			List<String> list = config.getStringList("bought kits");
-			String name = dk.name();
+			String name = dk.getName();
 			list.add(name);
 			set(config, "bought kits", list, true);
 			save(config, file(op));
-			
 		} else {
 			if(op.isOnline()) {
 				Player p = op.getPlayer();
@@ -109,23 +107,9 @@ public class ConfigDatabase extends Config {
 		}
 	}
 	
-	public static List<DonorKit> bought(OfflinePlayer op) {
-		List<DonorKit> list = Util.newList();
+	public static List<String> bought(OfflinePlayer op) {
 		YamlConfiguration config = load(op);
 		List<String> ss = config.getStringList("bought kits");
-		for(String s : ss) {
-			DonorKit dk = DonorKit.valueOf(s);
-			Util.print(op.getName() + " " + dk.name());
-			list.add(dk);
-		}
-		return list;
-	}
-	
-	public static boolean bought(OfflinePlayer op, DonorKit dk) {
-		YamlConfiguration config = load(op);
-		List<String> ss = config.getStringList("bought kits");
-		String name = dk.name();
-		boolean b = ss.contains(name);
-		return b;
+		return ss;
 	}
 }

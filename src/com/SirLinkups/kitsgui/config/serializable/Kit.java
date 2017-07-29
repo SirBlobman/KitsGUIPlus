@@ -1,7 +1,8 @@
 package com.SirLinkups.kitsgui.config.serializable;
 
-import com.SirLinkups.kitsgui.utility.Util;
+import com.SirLinkups.kitsgui.utility.*;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +22,9 @@ public class Kit implements ConfigurationSerializable {
     @SuppressWarnings("unchecked")
     public Kit(Map<String, Object> map) {
         this.name = (String) map.get("name");
-        this.icon = (ItemStack) map.get("icon");
+        ItemStack icon = (ItemStack) map.get("icon");
+        if(KitsUtil.air(icon)) this.icon = new ItemStack(Material.STONE_SWORD);
+        else this.icon = icon;
         this.items = (List<ItemStack>) map.get("items");
     }
     
@@ -41,6 +44,7 @@ public class Kit implements ConfigurationSerializable {
         ItemStack is = icon.clone();
         is.setAmount(1);
         ItemMeta meta = is.getItemMeta();
+        if(meta.hasLore()) meta.setLore(Util.newList());
         String name = Util.format("&2%1s", getName());
         meta.setDisplayName(name);
         meta.addItemFlags(ItemFlag.values());

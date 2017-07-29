@@ -17,6 +17,7 @@ public class ConfigKits extends Config {
     public static void loadKits() {
         try {
             KIT_LIST.clear();
+            DONOR_LIST.clear();
             if(!KITS_FOLDER.exists()) {
                 FOLDER.mkdirs();
                 KITS_FOLDER.mkdirs();

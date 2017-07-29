@@ -1,6 +1,11 @@
 package com.SirLinkups.kitsgui.config.serializable;
 
+import com.SirLinkups.kitsgui.config.ConfigDatabase;
+import com.SirLinkups.kitsgui.utility.Util;
+
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -24,4 +29,18 @@ public class DonorKit extends Kit {
     }
     
     public int getPrice() {return price;}
+    public boolean hasPaid(Player p) {
+        String name = getName();
+        List<String> list = ConfigDatabase.bought(p);
+        return list.contains(name);
+    }
+    
+    public ItemStack getIcon(Player p) {
+        ItemStack is = getIcon();
+        ItemMeta meta = is.getItemMeta();
+        String lore = Util.color(hasPaid(p) ? "&5Bought" : "&6Price: &c" + price + " &6coins");
+        meta.setLore(Util.newList(lore));
+        is.setItemMeta(meta);
+        return is;
+    }
 }

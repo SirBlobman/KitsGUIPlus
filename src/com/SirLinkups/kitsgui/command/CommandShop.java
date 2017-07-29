@@ -1,99 +1,148 @@
 package com.SirLinkups.kitsgui.command;
 
-import static com.SirLinkups.kitsgui.utility.KitsUtil.*;
 import static com.SirLinkups.kitsgui.command.CommandKit.HAS_KIT;
+import static com.SirLinkups.kitsgui.utility.KitsUtil.*;
 
-import com.SirLinkups.kitsgui.config.ConfigDatabase;
-import com.SirLinkups.kitsgui.special.DonorKit;
-import com.SirLinkups.kitsgui.utility.KitsUtil;
-import com.SirLinkups.kitsgui.utility.Util;
+import com.SirLinkups.kitsgui.config.*;
+import com.SirLinkups.kitsgui.config.serializable.*;
+import com.SirLinkups.kitsgui.utility.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.*;
 
 public class CommandShop implements CommandExecutor, Listener {
-	private static final String TITLE = Util.color("&1&lKit Shop");
-	private static final ItemStack AIR = newItem(Material.AIR);
-	private static final ItemStack SKULL = newItem(Material.SKULL_ITEM, 1, 0, "&f");
-	private static final ItemStack BARS = newItem(Material.IRON_FENCE, 1, 0, "&f");
+    private static Map<Player, Integer> PAGE = Util.newMap();
+    private static final String TITLE = Util.color("&1&lKit Shop");
+    private static final ItemStack BACK = newItem(Material.ARROW, 1, 0, "&fPrevious Page");
+    private static final ItemStack NEXT = newItem(Material.FEATHER, 1, 0, "&fNext Page");
 
-	private static final ItemStack THOR_KIT = DonorKit.THOR.getIcon();
-	private static final ItemStack THOR_KIT_NOT_PAID = addLore(THOR_KIT, "&6Cost: &e50 Coins");
-	
-	@Override
-	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-		if(cs instanceof Player) {
-			Player p = (Player) cs;
-			String c = cmd.getName().toLowerCase();
-			if(c.equals("kitshop")) {
-				if(HAS_KIT.contains(p)) {
-					String error = "You already have a kit!";
-					p.sendMessage(error);
-					return true;
-				} else {
-					p.openInventory(gui(p));
-					return true;
-				}
-			} else return false;
-		} else {
-			String error = "You are not a Player!";
-			cs.sendMessage(error);
-			return true;
-		}
-	}
-	
-	@EventHandler
-	public void click(InventoryClickEvent e) {
-		HumanEntity he = e.getWhoClicked();
-		if(he instanceof Player) {
-			Player p = (Player) he;
-			Inventory i = e.getClickedInventory();
-			if(i != null) {
-				String name = i.getName();
-				if(name != null && name.equals(TITLE)) {
-					e.setCancelled(true);
-					ItemStack is = e.getCurrentItem();
-					if(!KitsUtil.air(is)) {
-						PlayerInventory pi = p.getInventory();
-						if(equal(is, THOR_KIT_NOT_PAID)) ConfigDatabase.buyKit(p, DonorKit.THOR);
-						else if(equal(is, THOR_KIT)) {
-							p.closeInventory();
-							ItemStack[] add = DonorKit.THOR.getItems();
-							pi.clear();
-							pi.addItem(add);
-							
-							String msg = Util.color("&cYou selected the Thor kit");
-							p.sendMessage(msg);
-							HAS_KIT.add(p);
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	private Inventory gui(Player p) {
-		Inventory i = Bukkit.createInventory(null, 27, TITLE);
-		boolean bthor = ConfigDatabase.bought(p, DonorKit.THOR);
-		ItemStack thor;
-		if(bthor) {thor = THOR_KIT;} else {thor = THOR_KIT_NOT_PAID;}
-		ItemStack[] inv = new ItemStack[] {
-			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
-			BARS, thor, AIR, AIR, AIR, AIR, AIR, AIR, BARS,
-			SKULL, BARS, BARS, BARS, BARS, BARS, BARS, BARS, SKULL,
-		};
-		i.setContents(inv);
-		return i;
-	}
+    @Override
+    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
+        if(cs instanceof Player) {
+            Player p = (Player) cs;
+            String c = cmd.getName().toLowerCase();
+            if(c.equals("kitshop")) {
+                if(HAS_KIT.contains(p)) {
+                    String error = "You already have a kit!";
+                    p.sendMessage(error);
+                    return true;
+                } else {
+                    int page = 1;
+                    if(args.length > 0) {
+                        try {
+                            page = Integer.parseInt(args[0]);
+                            if(page < 1) page = 1;
+                        }
+                        catch(Throwable ex) {page = 1;}
+                    } else page = 1;
+
+                    Inventory gui = gui(p, page);
+                    p.openInventory(gui);
+                    return true;
+                }
+            } else return false;
+        } else {
+            String error = "You are not a Player!";
+            cs.sendMessage(error);
+            return true;
+        }
+    }
+
+    @EventHandler
+    public void click(InventoryClickEvent e) {
+        HumanEntity he = e.getWhoClicked();
+        if(he instanceof Player) {
+            Player p = (Player) he;
+            Inventory i = e.getClickedInventory();
+            if(i != null) {
+                String name = i.getName();
+                if(name != null && name.equals(TITLE)) {
+                    e.setCancelled(true);
+                    ItemStack is = e.getCurrentItem();
+                    if(!KitsUtil.air(is)) {
+                        if(is.equals(BACK)) {
+                            int page = PAGE.get(p);
+                            page -= 1;
+                            if(page < 1) page = 1;
+                            String cmd = Util.format("kits %1s", page);
+                            p.closeInventory();
+                            p.performCommand(cmd);
+                            PAGE.put(p, page);
+                        } else if(is.equals(NEXT)) {
+                            int page = PAGE.get(p);
+                            page += 1;
+                            String cmd = Util.format("kits %1s", page);
+                            p.closeInventory();
+                            p.performCommand(cmd);
+                            PAGE.put(p, page); 
+                        } else if(is.hasItemMeta()) {
+                            ItemMeta meta = is.getItemMeta();
+                            if(meta.hasDisplayName()) {
+                                String disp = meta.getDisplayName();
+                                String dname = Util.strip(disp);
+                                if(ConfigKits.doesDonorKitExist(dname)) {
+                                    DonorKit dk = ConfigKits.getDonorKit(dname);
+                                    if(dk.hasPaid(p)) {
+                                        ItemStack[] ii = dk.getItemsAsArray();
+                                        PlayerInventory pi = p.getInventory();
+                                        pi.clear();
+                                        for(ItemStack item : ii) {
+                                            Map<Integer, ItemStack> map = pi.addItem(item);
+                                            for(ItemStack drop : map.values()) {
+                                                World w = p.getWorld();
+                                                Location l = p.getLocation();
+                                                w.dropItem(l, drop);
+                                            }
+                                        }
+                                        p.closeInventory();
+                                        p.sendMessage("You selected a kit called '" + dk.getName() + "'.");
+                                        HAS_KIT.add(p);
+                                    } else ConfigDatabase.buyKit(p, dk);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private Inventory gui(Player p, int page) {
+        ConfigKits.loadKits();
+        List<String> kits = ConfigKits.getStringDonorKits();
+        int end = (page * 27);
+        int start = end - 27;
+        Inventory i = blank(page, end);
+        if(kits.isEmpty()) return i;
+        else {
+            if(kits.size() < start) return gui(p, 1);
+            if(kits.size() < end) end = kits.size();
+            List<String> list = kits.subList(start, end);
+            int j = 0;
+            for(String s : list) {
+                DonorKit dk = ConfigKits.getDonorKit(s);
+                ItemStack icon = dk.getIcon(p);
+                if(KitsUtil.air(icon)) icon = new ItemStack(Material.STONE_SWORD);
+                i.setItem(j, icon);
+                j++;
+            }
+            return i;
+        }
+    }
+
+    private Inventory blank(int page, int end) {
+        List<String> list = ConfigKits.getStringDonorKits();
+        Inventory i = Bukkit.createInventory(null, 45, TITLE);
+
+        if(page != 1) i.setItem(36, BACK);
+        if(list.size() > end) i.setItem(44, NEXT);
+        return i;
+    }
 }

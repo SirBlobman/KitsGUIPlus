@@ -1,4 +1,4 @@
-package com.SirLinkups.kitsgui.special;
+package com.SirLinkups.kitsgui.listener;
 
 import static com.SirLinkups.kitsgui.utility.KitsUtil.*;
 
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Set;
 
 public class DonorItem implements Listener {
-	public static final ItemStack THOR_AXE = newItem(Material.IRON_AXE, 1, 0, "&6&lMjölnir", "&a&oRight click to spawn lightning");
+	public static final ItemStack THOR_AXE = newItem(Material.IRON_AXE, 1, 0, "&6&lMj\u00F6lnir", "&a&oRight click to spawn lightning");
 	
 	@EventHandler
 	public void use(PlayerInteractEvent e) {
